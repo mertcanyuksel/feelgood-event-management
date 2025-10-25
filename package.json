@@ -1,0 +1,20 @@
+{
+  "name": "event-management-system",
+  "version": "1.0.0",
+  "description": "Excel-like MSSQL Event Management System",
+  "main": "index.js",
+  "scripts": {
+    "setup": "cd backend && node db/setup.js",
+    "server": "cd backend && nodemon server.js",
+    "client": "cd frontend && npm start",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "build": "cd frontend && npm run build"
+  },
+  "keywords": ["react", "mssql", "excel", "management"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
