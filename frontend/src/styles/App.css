@@ -390,9 +390,10 @@ body {
 
 /* Table */
 .table-wrapper {
-  overflow-x: auto;
+  overflow: auto; /* Both horizontal and vertical scroll */
   margin-top: 0; /* Üstte boşluk yok */
   margin-bottom: 20px;
+  max-height: calc(100vh - 300px); /* Viewport'a göre dinamik yükseklik */
   /* Smooth scrolling */
   scroll-behavior: smooth;
   /* Custom scrollbar */
@@ -407,26 +408,32 @@ body {
   background-repeat: no-repeat;
   background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
   background-attachment: local, local, scroll, scroll;
+  position: relative;
 }
 
 /* Webkit scrollbar styling */
 .table-wrapper::-webkit-scrollbar {
-  height: 10px;
+  height: 12px;
+  width: 12px;
 }
 
 .table-wrapper::-webkit-scrollbar-track {
   background: #f0f0f0;
-  border-radius: 5px;
+  border-radius: 6px;
 }
 
 .table-wrapper::-webkit-scrollbar-thumb {
   background: #1976D2;
-  border-radius: 5px;
+  border-radius: 6px;
   transition: background 0.3s;
 }
 
 .table-wrapper::-webkit-scrollbar-thumb:hover {
   background: #1565C0;
+}
+
+.table-wrapper::-webkit-scrollbar-corner {
+  background: #f0f0f0;
 }
 
 .data-table {
@@ -440,6 +447,9 @@ body {
 
 .data-table thead {
   background: #f5f5f5;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .data-table th {
@@ -896,35 +906,72 @@ body {
 /* Scroll Controls */
 .scroll-controls {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Global BusinessCard Filter */
+.businesscard-global-filter {
+  padding: 12px 20px;
+  background: white;
+  border: 2px solid #4CAF50;
+  border-radius: 8px;
+  color: #2E7D32;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 200px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  outline: none;
+}
+
+.businesscard-global-filter:hover {
+  background: #E8F5E9;
+  border-color: #2E7D32;
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+.businesscard-global-filter:focus {
+  background: #F1F8E9;
+  border-color: #2E7D32;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+.businesscard-global-filter option {
+  padding: 10px;
+  font-weight: 500;
 }
 
 .scroll-btn {
-  padding: 8px 16px;
+  padding: 12px 32px;
   background: white;
   border: 2px solid #1976D2;
-  border-radius: 6px;
+  border-radius: 8px;
   color: #1976D2;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 8px;
+  min-width: 140px;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .scroll-btn:hover {
   background: #1976D2;
   color: white;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(25, 118, 210, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(25, 118, 210, 0.4);
 }
 
 .scroll-btn:active {
   transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.2);
+  box-shadow: 0 3px 6px rgba(25, 118, 210, 0.3);
 }
 
 /* Smooth Animations */
@@ -1025,11 +1072,22 @@ body {
   .scroll-controls {
     width: 100%;
     justify-content: center;
+    gap: 8px;
+  }
+
+  .businesscard-global-filter {
+    width: 100%;
+    min-width: unset;
+    font-size: 13px;
+    padding: 10px 16px;
   }
 
   .scroll-btn {
     flex: 1;
     justify-content: center;
+    padding: 10px 20px;
+    min-width: 110px;
+    font-size: 13px;
   }
 }
 

@@ -129,6 +129,9 @@ const DataTable = () => {
     return filters;
   });
 
+  // Global BusinessCard filter - filters across all 5 card columns
+  const [globalBusinessCardFilter, setGlobalBusinessCardFilter] = useState('');
+
   // DnD sensors
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -191,10 +194,41 @@ const DataTable = () => {
     return [...new Set(values)].sort();
   };
 
+  // Get all unique BusinessCard values across all 5 card columns
+  const getAllBusinessCards = () => {
+    const allCards = [];
+    events.forEach(event => {
+      [event.KARTVIZIT1, event.KARTVIZIT2, event.KARTVIZIT3, event.KARTVIZIT4, event.KARTVIZIT5].forEach(card => {
+        if (card && card !== '-' && card !== null && card !== undefined) {
+          allCards.push(card);
+        }
+      });
+    });
+    return [...new Set(allCards)].sort();
+  };
+
   // Filtered and sorted events
   const filteredEvents = useMemo(() => {
     // First apply filters
     let filtered = events.filter(event => {
+      // Apply global BusinessCard filter across all 5 card columns
+      if (globalBusinessCardFilter) {
+        const hasMatchingCard = [
+          event.KARTVIZIT1,
+          event.KARTVIZIT2,
+          event.KARTVIZIT3,
+          event.KARTVIZIT4,
+          event.KARTVIZIT5
+        ].some(card =>
+          card &&
+          card !== '-' &&
+          card.toString().toLowerCase().includes(globalBusinessCardFilter.toLowerCase())
+        );
+
+        if (!hasMatchingCard) return false;
+      }
+
+      // Apply individual column filters
       return Object.keys(columnFilters).every(column => {
         const filterValue = columnFilters[column];
         if (!filterValue) return true; // No filter applied
@@ -229,7 +263,7 @@ const DataTable = () => {
     }
 
     return filtered;
-  }, [events, columnFilters, sortConfig]);
+  }, [events, columnFilters, sortConfig, globalBusinessCardFilter]);
 
   const handleFilterChange = (column, value) => {
     setColumnFilters(prev => ({
@@ -279,6 +313,7 @@ const DataTable = () => {
       KARTVIZIT4: '',
       KARTVIZIT5: ''
     });
+    setGlobalBusinessCardFilter(''); // Clear global BusinessCard filter too
   };
 
   const handleRowDoubleClick = (event) => {
@@ -320,7 +355,7 @@ const DataTable = () => {
   };
 
   // Check if any filter is active
-  const hasActiveFilters = Object.values(columnFilters).some(value => value !== '');
+  const hasActiveFilters = Object.values(columnFilters).some(value => value !== '') || globalBusinessCardFilter !== '';
 
   return (
     <div className="data-table-container">
@@ -375,6 +410,19 @@ const DataTable = () => {
         </div>
 
         <div className="scroll-controls">
+          <select
+            value={globalBusinessCardFilter}
+            onChange={(e) => setGlobalBusinessCardFilter(e.target.value)}
+            className="businesscard-global-filter"
+            title="Tüm kartvizit sütunlarında ara"
+          >
+            <option value="">Tüm Kartvizitler</option>
+            {getAllBusinessCards().map(card => (
+              <option key={card} value={card}>
+                {card}
+              </option>
+            ))}
+          </select>
           <button onClick={scrollLeft} className="scroll-btn" title="Sola kaydır">
             ← Sola
           </button>

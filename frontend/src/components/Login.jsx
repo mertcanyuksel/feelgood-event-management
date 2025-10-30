@@ -57,7 +57,6 @@ const Login = ({ onLoginSuccess }) => {
               id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="admin"
               disabled={loading}
               autoFocus
             />
@@ -70,7 +69,6 @@ const Login = ({ onLoginSuccess }) => {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
               disabled={loading}
             />
           </div>
